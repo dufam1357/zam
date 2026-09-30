@@ -1,0 +1,12 @@
+[project]
+name = "diary"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "dufam", email = "317925500+dufam1357@users.noreply.github.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "flask-sqlalchemy>=3.1.1",
+]

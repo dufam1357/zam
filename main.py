@@ -2,8 +2,9 @@
 from flask import Flask, render_template,request, redirect
 #Подключение библиотеки баз данных
 from flask_sqlalchemy import SQLAlchemy
-
-
+from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy import Integer, String
+from sqlalchemy.orm import Mapped, mapped_column
 app = Flask(__name__)
 #Подключение SQLite
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///diary.db'
@@ -12,9 +13,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app )
 
 #Задание №1. Создай таблицу БД
-
-
-
+class Card(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    title: Mapped[str] = mapped_column(unique=True)
+    subtitle:Mapped[str]
+    text:Mapped[str]
 
 
 
@@ -28,10 +31,10 @@ db = SQLAlchemy(app )
 def index():
     #Отображение объектов из БД
     #Задание №2. Отоброзить объекты из БД в index.html
-    
+    cards = Card.query.all()
 
     return render_template('index.html',
-                           #cards = cards
+                           cards = cards
 
                            )
 
@@ -39,7 +42,7 @@ def index():
 @app.route('/card/<int:id>')
 def card(id):
     #Задание №2. Отоброзить нужную карточку по id
-    
+    card = Card.query.get(id)
 
     return render_template('card.html', card=card)
 
@@ -57,7 +60,9 @@ def form_create():
         text =  request.form['text']
 
         #Задание №2. Создайте сопосб записи данных в БД
-        
+        card = Card(subtitle = subtitle , text = text , title = title)
+        db.session.add(card)
+        db.session.commit()
 
 
 
